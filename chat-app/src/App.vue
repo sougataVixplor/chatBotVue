@@ -9,6 +9,7 @@
 import ChatWindow from './components/ChatWindow.vue';
 import InputBox from './components/InputBox.vue';
 import { mapState, mapMutations } from 'vuex';
+import axios from './axios';
 
 export default {
   components: {
@@ -18,24 +19,27 @@ export default {
   computed: {
     ...mapState(['messages'])
   },
+  async created() {
+    await this.fetchMessages();
+  },
   methods: {
     ...mapMutations(['addMessage']),
-    sendMessage(message) {
-      this.addMessage(message);
+    async fetchMessages() {
+      try {
+        const response = await axios.get('/messages');
+        this.addMessage(response.data);
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+      }
+    },
+    async sendMessage(message) {
+      try {
+        await axios.post('/messages', { message });
+        await this.fetchMessages(); // Optionally refresh messages
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
     }
   }
 };
 </script>
-
-<style>
-.chat-app {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  max-width: 600px;
-  margin: auto;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  overflow: hidden;
-}
-</style>

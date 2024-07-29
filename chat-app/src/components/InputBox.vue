@@ -33,12 +33,13 @@ export default {
   display: flex;
   padding: 8px;
   border-top: 1px solid #ccc;
+  background-color: #fff;
 }
 
 input {
   flex: 1;
   padding: 8px;
-  border: none;
+  border: 1px solid #ccc;
   border-radius: 4px;
   margin-right: 8px;
   outline: none;
